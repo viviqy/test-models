@@ -1,35 +1,21 @@
-package com.fairychar.webtest.controller;
+package com.fairychar.security.configuration;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * Datetime: 2020/12/15 13:14 <br>
+ * Datetime: 2021/3/25 10:06 <br>
  *
  * @author chiyo <br>
  * @since 1.0
  */
-@Controller
-@RequestMapping("/rf")
-public class RedirectController {
-    @RequestMapping("/r/bing")
-    public String rBing(){
-        return "";
-    }
-
-    @RequestMapping("/f/bing")
-    public String fBing(){
-        return "forward:https://bing.com";
-    }
-
-    @RequestMapping("/r/lc")
-    public String rlc(){
-        return "redirect:http://localhost:8080/index/hi";
-    }
-
-    @RequestMapping("/f/lc")
-    public String flc(){
-        return "forward:http://localhost:8080/index/hi";
+@Configuration
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/**").permitAll();
     }
 }
 /*

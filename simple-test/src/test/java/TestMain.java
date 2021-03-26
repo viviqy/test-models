@@ -1,3 +1,4 @@
+import com.fairychar.test.simple.pojo.Customer;
 import org.junit.Test;
 
 import java.util.concurrent.CompletableFuture;
@@ -10,6 +11,77 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @since 1.0
  */
 public class TestMain {
+
+    @Test
+    public void testLockSequence(){
+        final Object lock=new Object();
+        Thread[] threads = new Thread[10];
+        for (int i = 0; i < 10; i++) {
+            threads[i]=new Thread(()->{
+                System.out.println(Thread.currentThread()+" in");
+                synchronized (lock) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                    }
+                    System.out.println(Thread.currentThread()+" out");
+                }
+            });
+        }
+        synchronized (lock){
+
+        }
+    }
+
+    @Test
+    public void testLock() throws InterruptedException {
+        final Object LOCK = new Object();
+        int N = 10;
+        Thread[] threads = new Thread[10];
+        for (int i = 0; i < N; i++) {
+            threads[i] = new Thread(() -> {
+                System.out.println(Thread.currentThread().getName() + " begin...");
+                synchronized (LOCK) {
+                    System.out.println(Thread.currentThread().getName() + "get sync lock!");
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, "thread [" + i + "]");
+        }
+        synchronized (LOCK) {
+            for (int i = 0; i < N; i++) {
+                threads[i].start();
+                System.out.println(threads[i].getName() + " start!");
+                Thread.sleep(200);
+            }
+            Thread.sleep(200);
+        }
+        System.out.println("all started");
+        Thread.currentThread().join();
+    }
+
+    @Test
+    public void testClone() throws Exception {
+        Customer c1 = new Customer();
+        Customer clone = (Customer) c1.getClass().getDeclaredMethod("clone").invoke(c1, null);
+        System.out.println(c1);
+        System.out.println(clone);
+        System.out.println(c1);
+        Customer c2 = new Customer();
+        System.out.println(c2);
+
+
+        Customer c3 = c2;
+        System.out.println(c3);
+        c1.id = 1;
+        clone.id = 2;
+        System.out.println(c1.id);
+        System.out.println(clone.id);
+    }
+
     @Test
     public void test1() {
         AtomicBoolean nothingCanChangeMyLove = new AtomicBoolean();
@@ -29,7 +101,6 @@ public class TestMain {
     }
 
     private void doMyPlan() {
-        throw new RuntimeException();
     }
 
     private void makePlanToMeetYou() {

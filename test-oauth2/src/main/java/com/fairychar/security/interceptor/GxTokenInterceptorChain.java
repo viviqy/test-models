@@ -1,35 +1,34 @@
-package com.fairychar.webtest.controller;
+package com.fairychar.security.interceptor;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
- * Datetime: 2020/12/15 13:14 <br>
+ * Datetime: 2021/3/25 11:27 <br>
  *
  * @author chiyo <br>
  * @since 1.0
  */
-@Controller
-@RequestMapping("/rf")
-public class RedirectController {
-    @RequestMapping("/r/bing")
-    public String rBing(){
-        return "";
-    }
-
-    @RequestMapping("/f/bing")
-    public String fBing(){
-        return "forward:https://bing.com";
-    }
-
-    @RequestMapping("/r/lc")
-    public String rlc(){
-        return "redirect:http://localhost:8080/index/hi";
-    }
-
-    @RequestMapping("/f/lc")
-    public String flc(){
-        return "forward:http://localhost:8080/index/hi";
+//@Component
+public class GxTokenInterceptorChain extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            filterChain.doFilter(httpServletRequest,httpServletResponse);
+        }
     }
 }
 /*
