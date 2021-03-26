@@ -4,12 +4,13 @@ server:
 security:
   oauth2:
     client:
-      id: gxdj
       client-secret: 9VvJvgaImYgC61Eyx3g0fFtMn0Yu1FdijU43BgPF5ZP8DhYpUmM9Fhye9NdV2C8t5nFz8nsOznonK+DDPDFgBg==
       scope: all
       access-token-uri: https://checking.cdiisp.com:8800/uias/sso/getAccessToken
       grant-type: client_credentials
       refresh-token-validity-seconds: 3600
+      token-name: accessToken
+      client-id: gxdj
     resource:
       token-info-uri: ${uaa-server}/oauth/check_token
       service-id: res-hehuan

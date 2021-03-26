@@ -1,5 +1,6 @@
 package com.fairychar.security.beans;
 
+import com.fairychar.security.pojo.dto.TokenDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class GxOAuth2RestTemplate {
 
     @Autowired
     private RestTemplate restTemplate;
-    private DataDTO token;
+    private TokenDTO token;
     private long lastOAuthTime = System.currentTimeMillis();
 
     public void getAccessToken() throws UserRedirectRequiredException {
@@ -60,23 +61,10 @@ public class GxOAuth2RestTemplate {
         @JsonProperty("errorDescription")
         private Object errorDescription;
         @JsonProperty("data")
-        private DataDTO data;
+        private TokenDTO data;
 
     }
 
-    @NoArgsConstructor
-    @Data
-    public static class DataDTO {
-        /**
-         * accessToken : c384bc4e6018ad1f097856ec3046948b
-         * deadline : 2021-03-25 16:49:17
-         */
-
-        @JsonProperty("accessToken")
-        private String accessToken;
-        @JsonProperty("deadline")
-        private String deadline;
-    }
 }
 /*
                                       /[-])//  ___        

@@ -21,6 +21,8 @@ public class GxClientAuthenticationHandler implements ClientAuthenticationHandle
     public void authenticateTokenRequest(OAuth2ProtectedResourceDetails resource, MultiValueMap<String, String> form,
                                          HttpHeaders headers) {
         if (resource.isAuthenticationRequired()) {
+            headers.set("client_id", "gxdj");
+            headers.set("authenticator", "9VvJvgaImYgC61Eyx3g0fFtMn0Yu1FdijU43BgPF5ZP8DhYpUmM9Fhye9NdV2C8t5nFz8nsOznonK+DDPDFgBg==");
             AuthenticationScheme scheme = AuthenticationScheme.header;
             if (resource.getClientAuthenticationScheme() != null) {
                 scheme = resource.getClientAuthenticationScheme();
