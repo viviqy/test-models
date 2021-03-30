@@ -8,13 +8,10 @@ security:
       scope: all
       access-token-uri: https://checking.cdiisp.com:8800/uias/sso/getAccessToken
       grant-type: client_credentials
-      refresh-token-validity-seconds: 3600
       token-name: accessToken
       client-id: gxdj
-    resource:
-      token-info-uri: ${uaa-server}/oauth/check_token
-      service-id: res-hehuan
-      id: res-hehuan
+      client-authentication-scheme: header
+      authentication-scheme: header
 debug: true
 spring:
   main:

@@ -1,6 +1,7 @@
 package com.fairychar.security.configuration;
 
 import com.fairychar.security.beans.GxClientAuthenticationHandler;
+import com.fairychar.security.beans.GxOAuth2RequestAuthenticator;
 import com.fairychar.security.beans.GxOAuth2RestTemplate;
 import com.fairychar.security.beans.SimpleOAuth2RestTemplate;
 import com.google.common.collect.Sets;
@@ -24,7 +25,10 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -84,8 +88,11 @@ public class BeansConfiguration {
                 try {
                     Map dataMap = (Map) unHandleMsg.getAdditionalInformation().get("data");
                     String token = (String) dataMap.get("accessToken");
+                    String expire = (String) dataMap.get("deadline");//yyyy-MM-dd HH:mm:ss
+                    Date expireDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(expire);
                     DefaultOAuth2AccessToken oAuth2AccessToken = new DefaultOAuth2AccessToken(token);
                     oAuth2AccessToken.setScope(Sets.newHashSet("all"));
+                    oAuth2AccessToken.setExpiration(expireDate);
                     accessToken = oAuth2AccessToken;
 
                 } catch (Exception ignore) {
@@ -99,6 +106,7 @@ public class BeansConfiguration {
             }
         };
         oAuth2RestTemplate.setAccessTokenProvider(clientCredentialsAccessTokenProvider);
+        oAuth2RestTemplate.setAuthenticator(new GxOAuth2RequestAuthenticator());
         return oAuth2RestTemplate;
     }
 
