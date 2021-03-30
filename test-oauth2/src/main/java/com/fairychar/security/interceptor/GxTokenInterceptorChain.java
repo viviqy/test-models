@@ -1,5 +1,6 @@
 package com.fairychar.security.interceptor;
 
+import com.fairychar.security.pojo.dto.RemoteUserDTO;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -29,24 +35,31 @@ public class GxTokenInterceptorChain extends OncePerRequestFilter {
     private OAuth2RestTemplate restTemplate;
     @Value("${security.oauth2.resource.token-info-uri}")
     private String validateUrl;
+    private AntPathMatcher matcher = new AntPathMatcher();
+    private String pattern = "/public/**";
+    private String tokenName = "gx-token";
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String token = httpServletRequest.getHeader("token");
+        if (matcher.match(pattern, httpServletRequest.getRequestURI())) {
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        }
+        String token = httpServletRequest.getHeader(tokenName);
         if (Strings.isNullOrEmpty(token)) {
             return;
         }
-        ResponseEntity<Object> validateEntity = restTemplate.postForEntity(validateUrl, new HttpEntity<>(new HttpHeaders() {{
+        ResponseEntity<RemoteUserDTO> validateEntity = restTemplate.postForEntity(validateUrl, new HttpEntity<>(new HttpHeaders() {{
             set("token", token);
-        }}), Object.class, Maps.newHashMap());
+        }}), RemoteUserDTO.class, Maps.newHashMap());
         if (validate(validateEntity)) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
     }
 
-    private boolean validate(ResponseEntity<Object> validateEntity) {
+    private boolean validate(ResponseEntity<RemoteUserDTO> validateEntity) {
         return false;
     }
+
 }
 /*
                                       /[-])//  ___        
