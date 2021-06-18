@@ -1,0 +1,10 @@
+spring:
+  redis:
+    #    cluster:
+    #      nodes:
+    #        - ali1.fairychar.com:16973
+    #        - ali1.fairychar.com:16974
+    #        - ali1.fairychar.com:16975
+    max-redirects: 3
+    port: 6379
+    host: ten.fairychar.com

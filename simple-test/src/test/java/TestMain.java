@@ -12,6 +12,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class TestMain {
 
+
+    @Test
+    public void testMaxLength(){
+        int max=15;
+        double far=0D;
+        for (int i = max; i >0; i--) {
+            far+=(100D/i);
+        }
+        System.out.println(far+100);
+    }
+
     @Test
     public void testLockSequence(){
         final Object lock=new Object();

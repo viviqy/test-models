@@ -12,6 +12,7 @@
     <module>simple-test</module>
     <module>simple-web-test</module>
     <module>test-oauth2</module>
+    <module>build-templates</module>
   </modules>
   
   
