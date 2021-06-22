@@ -3,3 +3,6 @@ server:
     max-threads: 2
     accept-count: 5
     min-spare-threads: 1
+  undertow:
+    io-threads: 1
+    worker-threads: 5

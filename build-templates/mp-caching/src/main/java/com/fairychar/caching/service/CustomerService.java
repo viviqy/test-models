@@ -107,7 +107,11 @@ public class CustomerService extends ServiceImpl<CustomerMapper, Customer> imple
     @Override
     public IPage<CustomerDTO> page(Page page, CustomerQuery customerQuery) {
         Customer entity = this.customerStructure.queryToEntity(customerQuery);
-        return this.page(page, new QueryWrapper<>(entity));
+        Page<Customer> queries = this.page(page, new QueryWrapper<>(entity));
+        List<CustomerDTO> dtos = this.customerStructure.entitiesToDtos(queries.getRecords());
+        Page<CustomerDTO> resultPage = new Page<>(queries.getCurrent(), queries.getSize(), queries.getTotal());
+        resultPage.setRecords(dtos);
+        return resultPage;
     }
 
     /**

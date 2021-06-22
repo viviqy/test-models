@@ -13,6 +13,7 @@
     <module>simple-web-test</module>
     <module>test-oauth2</module>
     <module>build-templates</module>
+    <module>test-netty</module>
   </modules>
   
   
